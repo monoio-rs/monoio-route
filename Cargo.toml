@@ -1,0 +1,28 @@
+[package]
+name = "monoio-route"
+version = "0.1.0"
+license = "MIT OR Apache-2.0"
+authors = ["ChiHai <ihciah@gmail.com>"]
+edition = "2021"
+description = "Yet another high performance router."
+categories = ["network-programming", "algorithms"]
+keywords = ["router", "path", "tree", "match", "url"]
+repository = "https://github.com/monoio/monoio-route"
+readme = "README.md"
+
+[dependencies]
+smallvec = "1"
+memchr = "2"
+
+[dev-dependencies]
+# for examples
+monoio = { version = "0.2.3" }
+monoio-compat = { version = "0.2.2", features = ["hyper"] }
+hyper = { version = "1", features = ["full"] }
+http-body-util = "0.1"
+bytes = "1"
+
+[profile.release]
+lto = true
+opt-level = 3
+codegen-units = 1
