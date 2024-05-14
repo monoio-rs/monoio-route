@@ -80,8 +80,8 @@ impl<T> StaticChildren<T> {
         Some(unsafe { self.children.get_unchecked(idx) })
     }
 
-    // # Safety
-    // `segment_path` can not be empty.
+    /// # Safety
+    /// `segment_path` can not be empty.
     #[inline(always)]
     unsafe fn get_mut_or_insert_unchecked(&mut self, segment_path: &[u8]) -> &mut Node<T> {
         let first = *segment_path.first().unwrap_unchecked();
@@ -91,8 +91,8 @@ impl<T> StaticChildren<T> {
         self.insert_unchecked(first, Node::new(segment_path))
     }
 
-    // # Safety
-    // Must make sure that `byte` is not in `self.indices`.
+    /// # Safety
+    /// Must make sure that `byte` is not in `self.indices`.
     #[inline(always)]
     unsafe fn insert_unchecked(&mut self, byte: u8, node: Node<T>) -> &mut Node<T> {
         debug_assert_eq!(self.indices.len(), self.children.len());
