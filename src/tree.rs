@@ -261,6 +261,11 @@ impl<T> Node<T> {
                 if let Some(endpoint) = &node.endpoint {
                     return Some((&endpoint.value, endpoint.remapping(params)));
                 }
+                if let Some(catch_all) = &node.catch_all_child {
+                    params.push((&[], b""));
+                    return Some((&catch_all.endpoint.value, catch_all.endpoint.remapping(params)));
+                }
+                backtrack!();
             }
             backtrack!();
         }
