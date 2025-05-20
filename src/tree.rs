@@ -261,6 +261,11 @@ impl<T> Node<T> {
                 if let Some(endpoint) = &node.endpoint {
                     return Some((&endpoint.value, endpoint.remapping(params)));
                 }
+                if let Some(catch_all) = &node.catch_all_child {
+                    params.push((&[], b""));
+                    return Some((&catch_all.endpoint.value, catch_all.endpoint.remapping(params)));
+                }
+                backtrack!();
             }
             backtrack!();
         }
@@ -553,5 +558,35 @@ mod tests {
 
         assert_at!(tree, b"/a/b/c", 6, params!(b"path" => b"c"));
         assert_at!(tree, b"/a/x/c", 5, params!(b"name" => b"x"));
+    }
+
+    #[test]
+    fn catch_all_with_single_slash() {
+        let mut tree = Tree::new();
+        tree.insert(b"/*path", 1).unwrap();
+    
+        // 测试单个斜杆的情况
+        assert_at!(
+            tree,
+            b"/",
+            1,
+            params!(b"path" => b"")
+        );
+    
+        // 测试正常路径的情况，确保不影响其他匹配
+        assert_at!(
+            tree,
+            b"/users",
+            1,
+            params!(b"path" => b"users")
+        );
+    
+        // 测试多个斜杆的情况
+        assert_at!(
+            tree,
+            b"/users/123",
+            1,
+            params!(b"path" => b"users/123")
+        );
     }
 }
