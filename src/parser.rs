@@ -74,7 +74,7 @@ impl<'a> Iterator for SegmentsIter<'a> {
                 }
                 let inner = self.inner;
                 self.inner = &[];
-                return Some(Ok(Segment::Static(inner)));
+                Some(Ok(Segment::Static(inner)))
             }
         }
     }
